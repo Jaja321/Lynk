@@ -7,6 +7,10 @@ import MenuIcon from 'material-ui-icons/Menu';
 import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import Login from './Login.js';
+import UserTag from './UserTag.js';
+import Drawer from './Drawer.js';
+import Select from 'material-ui/Select';
+import { MenuItem } from 'material-ui/Menu';
 
 const styles = {
   root: {
@@ -20,21 +24,32 @@ const styles = {
 
 class ButtonAppBar extends Component {
 
+  state={
+    drawerOpen: false
+  };
+
+  toggleDrawer = (open)=> (() => {
+    this.setState({
+      drawerOpen: open,
+    });
+  });
+
   render(){
     const {classes} = this.props;
     return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+          <IconButton onClick={this.toggleDrawer(true)} className={classes.menuButton} color="inherit" aria-label="Menu">
             <MenuIcon />
           </IconButton>
           <Typography variant="title" color="inherit">
             Lynk
           </Typography>
-          <Login/>
+          {this.props.user ? <UserTag user={this.props.user}/> :<Login setUser={this.props.setUser}/>}
         </Toolbar>
       </AppBar>
+      <Drawer open={this.state.drawerOpen} closeDrawer={this.toggleDrawer(false)} setUser={this.props.setUser}/>
     </div>
     );
   }

@@ -5,6 +5,10 @@ body {
 }
 
 .postsWrapper{
-	width: 70%;
+	max-width: 1000px;
 	margin: auto;
+}
+
+.a:hover{
+	cursor: pointer;
 }

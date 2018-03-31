@@ -22,7 +22,7 @@ class PostList extends Component {
 
 	componentDidMount(){
 
-		fetch("/posts").then(result=>{
+		fetch("/posts/"+this.props.sort).then(result=>{
 			return result.json();
 		}).then(result=>{
 			this.setState({posts: result});

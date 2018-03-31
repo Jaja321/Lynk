@@ -31,7 +31,16 @@ class Login extends Component{
 		this.handleSubmit= this.handleSubmit.bind(this);
 	}
 
+	gotoSignup = () =>{
+		this.setState({tab : 1});
+	}
+
 	render(){
+		var suggestSignup= this.state.tab==1?  null: (
+			<Typography variant="p" style={{marginTop: 10}}>
+			Don't have a user yet? <a onClick={this.gotoSignup}>Sign up</a>
+			</Typography>
+			);
 		return (
 			<div  style={{marginLeft: 'auto'}}>
 			<Button color="inherit" onClick={this.handleClick}>Login</Button>
@@ -44,6 +53,7 @@ class Login extends Component{
 	            <Tab label="Sign Up" />
 	          </Tabs>
 	          <DialogContent>
+	          	{suggestSignup}
 	            <TextField
 	              autoFocus
 	              onChange={this.handleChange('username')}
@@ -57,8 +67,8 @@ class Login extends Component{
 	           	  onChange={this.handleChange('password')}
 	              margin="dense"
 	              label="Password"
+	              type="password"
 	              value={this.state.urlValue}
-	              type="email"
 	              fullWidth
 	            />
 	            <Typography variant="body2" color="secondary" style={{marginTop: 5}}>{this.state.errorMessage}</Typography>
@@ -112,7 +122,10 @@ class Login extends Component{
 				this.setState({errorMessage: res.error});
 			}else{
 				cookies.set('token', res.token, {path: '/'});
+				cookies.set('user', res.username, {path: '/'});
 				this.setState({dialogOpen: false, errorMessage: ""});
+				this.props.setUser();
+				
 			}
 		});			
 		
