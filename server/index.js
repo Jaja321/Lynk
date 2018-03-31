@@ -15,9 +15,9 @@ var Post= require('./Post.js');
 var User= require('./User.js');
 
 
-app.get('/posts', (req,res)=>{
+app.get('/posts/top', (req,res)=>{
 	console.log("in posts");
-	Post.find((err,posts)=>{
+	Post.find({}).sort({'points':-1}).exec((err,posts)=>{
 		res.json(posts);
 	});
 });
@@ -82,7 +82,7 @@ app.post('/login', (req,res)=>{
 			}
 			else{
 				var token= jwt.sign({username: user.username}, 'banana'); //TODO: put secret in .env
-				res.json({token: token});
+				res.json({token: token, username: user.username});
 				console.log('Logged in');
 			}
 		}).catch(err=>{
