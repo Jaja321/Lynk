@@ -17,10 +17,6 @@ const postSchema= mongoose.Schema({
 		type: Date,
 		default: Date.now
 	},
-	points:{
-		type: Number,
-		default: 0
-	},
 	upvoted: {
 		type: Array,
 		default: []

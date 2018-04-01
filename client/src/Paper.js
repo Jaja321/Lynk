@@ -45,7 +45,7 @@ class PaperSheet extends Component{
             Posted by {this.props.post.author} {ta.ago(new Date(this.props.post.posted_at))}
           </Typography>
           <Typography variant="body1" style={thumbStyle}>
-              {this.props.post.points} points
+              {this.props.post.score} points
           </Typography>
           <Icon style={thumbStyle} onClick={this.vote(true)}>thumb_up</Icon>
           <Icon style={thumbStyle} onClick={this.vote(false)}>thumb_down</Icon>
