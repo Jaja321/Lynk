@@ -8,9 +8,8 @@ import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import Login from './Login.js';
 import UserTag from './UserTag.js';
+import SortSelect from './SortSelect.js';
 import Drawer from './Drawer.js';
-import Select from 'material-ui/Select';
-import { MenuItem } from 'material-ui/Menu';
 
 const styles = {
   root: {
@@ -46,6 +45,7 @@ class ButtonAppBar extends Component {
           <Typography variant="title" color="inherit">
             Lynk
           </Typography>
+          <SortSelect setSort={this.props.setSort}/>
           {this.props.user ? <UserTag user={this.props.user}/> :<Login setUser={this.props.setUser}/>}
         </Toolbar>
       </AppBar>

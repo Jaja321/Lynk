@@ -43,12 +43,8 @@ class AddPost extends Component{
           open={this.state.dialogOpen}
           onClose={this.handleClose}
         >
-          <DialogTitle>Add Post</DialogTitle>
+          <DialogTitle>Add Link</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              To subscribe to this website, please enter your email address here. We will send
-              updates occationally.
-            </DialogContentText>
             <TextField
               autoFocus
               onChange={this.handleChange('title')}

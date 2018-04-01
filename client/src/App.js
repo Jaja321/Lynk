@@ -9,16 +9,17 @@ const cookies = new Cookies();
 class App extends Component {
 	constructor(props){
 		super(props);
-		this.state={};
+		this.state={postListSort: "hot"};
 		this.setUser=this.setUser.bind(this);
+		this.setSort=this.setSort.bind(this);
 		
 	}
 
 	render() {
 		return (
 		  <div className="App">
-		  	<ButtonAppBar user={this.state.user} setUser={this.setUser}/>
-		  	<PostList sort="top"/>
+		  	<ButtonAppBar user={this.state.user} setUser={this.setUser} setSort={this.setSort}/>
+		  	<PostList sort={this.state.postListSort}/>
 		  	<AddPost/>
 		  	
 		  </div>
@@ -38,6 +39,11 @@ class App extends Component {
 		else
 			this.setState({user: null});
 	}
+
+	setSort(sort){
+		this.setState({postListSort: sort});
+	}
+
 
 }
 

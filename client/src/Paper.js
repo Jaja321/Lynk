@@ -5,6 +5,9 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import Icon from 'material-ui/Icon';
 import ta from 'time-ago'
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 const styles = {
   root:{
@@ -44,26 +47,23 @@ class PaperSheet extends Component{
           <Typography variant="body1" style={thumbStyle}>
               {this.props.post.points} points
           </Typography>
-          <Icon style={thumbStyle} onClick={this.upvote(this.props.post._id)}>thumb_up</Icon>
-          <Icon style={thumbStyle}>thumb_down</Icon>
+          <Icon style={thumbStyle} onClick={this.vote(true)}>thumb_up</Icon>
+          <Icon style={thumbStyle} onClick={this.vote(false)}>thumb_down</Icon>
 
         </Paper>
       </div>
     );
   }
 
-  upvote(id){
+  vote(up){
     return ()=>{
-        console.log(id);
-        fetch('/posts/'+id+'/upvote', {
+        var token=cookies.get('token');
+        fetch('/posts/'+this.props.post._id+'/'+(up? 'upvote' : 'downvote')+'?token='+token, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
-        body:{
-          hey: 'sup'
-        }
         });
       };
     }

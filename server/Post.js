@@ -20,7 +20,15 @@ const postSchema= mongoose.Schema({
 	points:{
 		type: Number,
 		default: 0
-	}	
+	},
+	upvoted: {
+		type: Array,
+		default: []
+	},
+	downvoted: {
+		type: Array,
+		default: []
+	}
 });
 
 module.exports= mongoose.model('Post', postSchema);

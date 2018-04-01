@@ -22,9 +22,56 @@ app.get('/posts/top', (req,res)=>{
 	});
 });
 
+app.get('/posts/new', (req,res)=>{
+	console.log("in posts");
+	Post.find({}).sort({'posted_at':-1}).exec((err,posts)=>{
+		res.json(posts);
+	});
+});
+
+app.get('/posts/hot', (req,res)=>{
+	console.log("in posts");
+	Post.aggregate([{
+		$addFields : {
+			hotness: {
+				$subtract: ["$points",{
+					$divide: [{
+						$subtract: [new Date(), "$posted_at"]
+					}, 36000000]
+				}]
+			}
+		}
+	}]).sort({'hotness': -1}).exec((err,posts)=>{
+		res.json(posts);
+	});
+});
+
 app.post('/posts/:id/upvote', (req,res)=>{
-	console.log("hey ya");
-	Post.findOneAndUpdate({_id: req.params.id}, {$inc:{points:1}}, (err, post_id)=>{
+	var username=jwt.verify(req.query.token, 'banana').username;
+	Post.findOneAndUpdate({
+		_id: req.params.id,
+		upvoted: {$ne: username}
+	}, 
+	{
+		$inc:{points:1},
+		$push: {upvoted: username},
+		$pull: {downvoted: username}
+	}, (err, post_id)=>{
+		res.send("ok");
+	});
+});
+
+app.post('/posts/:id/downvote', (req,res)=>{
+	var username=jwt.verify(req.query.token, 'banana').username;
+	Post.findOneAndUpdate({
+		_id: req.params.id,
+		downvoted: {$ne: username}
+	}, 
+	{
+		$inc:{points:-1},
+		$push: {downvoted: username},
+		$pull: {upvoted: username}
+	}, (err, post_id)=>{
 		res.send("ok");
 	});
 });
