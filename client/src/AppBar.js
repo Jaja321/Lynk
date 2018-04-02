@@ -45,8 +45,10 @@ class ButtonAppBar extends Component {
           <Typography variant="title" color="inherit">
             Lynk
           </Typography>
+          <div style={{marginLeft: 'auto', display: 'flex', alignItems: 'center'}}>
           <SortSelect setSort={this.props.setSort}/>
           {this.props.user ? <UserTag user={this.props.user}/> :<Login setUser={this.props.setUser}/>}
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer open={this.state.drawerOpen} closeDrawer={this.toggleDrawer(false)} setUser={this.props.setUser}/>

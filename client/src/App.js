@@ -2,9 +2,17 @@ import React, { Component } from 'react';
 import ButtonAppBar from './AppBar.js';
 import PostList from './PostList.js';
 import AddPost from './AddPost.js';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import blue from 'material-ui/colors/blue';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
+
+const theme = createMuiTheme({
+	palette: {
+	    primary: blue,
+	  }
+});
 
 class App extends Component {
 	constructor(props){
@@ -17,12 +25,13 @@ class App extends Component {
 
 	render() {
 		return (
+		<MuiThemeProvider theme={theme}>
 		  <div className="App">
 		  	<ButtonAppBar user={this.state.user} setUser={this.setUser} setSort={this.setSort}/>
 		  	<PostList sort={this.state.postListSort}/>
-		  	<AddPost/>
-		  	
+		  	<AddPost/>  	
 		  </div>
+		  </MuiThemeProvider>
 
 		);
 	}

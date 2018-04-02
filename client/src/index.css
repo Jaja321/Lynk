@@ -5,10 +5,19 @@ body {
 }
 
 .postsWrapper{
-	max-width: 1000px;
+	width: 99%;
 	margin: auto;
 }
 
-.a:hover{
+a:hover{
 	cursor: pointer;
+}
+
+.thumb{
+	color: rgba(0, 0, 0, 0.50);
+}
+
+.thumb:hover{
+	cursor: pointer;
+	color: rgba(0, 0, 0, 0.80);
 }

@@ -17,7 +17,7 @@ const cookies = new Cookies();
 
 const style={
 	buttonStyle: {
-    	position:'fixed',
+    position:'fixed',
 		right: 20,
 		bottom: 20,
   },

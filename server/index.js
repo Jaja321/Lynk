@@ -14,48 +14,78 @@ app.use(bodyParser.json());
 var Post= require('./Post.js');
 var User= require('./User.js');
 
-const score= {$subtract: [{$size: '$upvoted'},{$size: '$downvoted'}]};
+const scoreExp= {$subtract: [{$size: '$upvoted'},{$size: '$downvoted'}]};
+
+function getAggregationStages(req){
+	var token= req.query.token;
+	var username= '';
+	if(token !== undefined)
+		username=jwt.verify(token, 'banana').username;
+	return [{
+		$addFields: {
+			score: scoreExp,
+			upvote: {
+				$in : [username, '$upvoted']
+			} ,
+			downvote: {
+				$in : [username, '$downvoted']
+			}
+		}
+	},{
+		$project: {
+			title: 1,
+			url: 1,
+			_id: 1,
+			author: 1,
+			posted_at: 1,
+			upvote: 1,
+			downvote: 1,
+			score: 1
+		}
+	}];
+}
+
 
 
 app.get('/posts/top', (req,res)=>{
-	Post.aggregate([{
-		$addFields: {
-			score: score
-		}
-	}]).sort({'score':-1}).exec((err,posts)=>{
+	Post.aggregate(getAggregationStages(req)).sort({'score':-1}).exec((err,posts)=>{
 		console.log(posts);
 		res.json(posts);
 	});
 });
 
 app.get('/posts/new', (req,res)=>{
-	Post.find({}).sort({'posted_at':-1}).exec((err,posts)=>{
+	Post.aggregate(getAggregationStages(req)).sort({'posted_at':-1}).exec((err,posts)=>{
 		res.json(posts);
 	});
 });
 
 app.get('/posts/hot', (req,res)=>{
-	Post.aggregate([{
+	var aggregationStages=getAggregationStages(req);
+	aggregationStages.push({
 		$addFields : {
 			hotness: {
 				//hotness= score-(hours passed since posted)/10
-				$subtract: [score,{
+				$subtract: ['$score',{
 					$divide: [{
 						$subtract: [new Date(), "$posted_at"]
 					}, 36000000]
 				}]
-			},
-			score: score
+			}
 		}
-	}]).sort({'hotness': -1}).exec((err,posts)=>{
+	});
+	Post.aggregate(aggregationStages).sort({'hotness': -1}).exec((err,posts)=>{
 		res.json(posts);
 	});
 });
 
 app.post('/posts/:id/upvote', (req,res)=>{
-	var username=jwt.verify(req.query.token, 'banana').username;
-	if(!username)
+	var token= req.query.token;
+	var username;
+	if(token === undefined)
 		return;
+	else
+		username=jwt.verify(token, 'banana').username;
 	Post.findOneAndUpdate({
 		_id: req.params.id,
 		upvoted: {$ne: username}
@@ -69,9 +99,12 @@ app.post('/posts/:id/upvote', (req,res)=>{
 });
 
 app.post('/posts/:id/downvote', (req,res)=>{
-	var username=jwt.verify(req.query.token, 'banana').username;
-	if(!username)
+	var token= req.query.token;
+	var username;
+	if(token === undefined)
 		return;
+	else
+		username=jwt.verify(token, 'banana').username;
 	Post.findOneAndUpdate({
 		_id: req.params.id,
 		downvoted: {$ne: username}
@@ -79,6 +112,23 @@ app.post('/posts/:id/downvote', (req,res)=>{
 	{
 		$push: {downvoted: username},
 		$pull: {upvoted: username}
+	}, (err, post_id)=>{
+		res.send("ok");
+	});
+});
+
+app.post('/posts/:id/unvote', (req,res)=>{
+	var token= req.query.token;
+	var username;
+	if(token === undefined)
+		return;
+	else
+		username=jwt.verify(token, 'banana').username;
+	Post.findOneAndUpdate({
+		_id: req.params.id,
+	}, 
+	{
+		$pull: {downvoted: username, upvoted: username},
 	}, (err, post_id)=>{
 		res.send("ok");
 	});

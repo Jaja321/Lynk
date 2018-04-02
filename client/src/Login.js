@@ -42,7 +42,7 @@ class Login extends Component{
 			</Typography>
 			);
 		return (
-			<div  style={{marginLeft: 'auto'}}>
+			<div>
 			<Button color="inherit" onClick={this.handleClick}>Login</Button>
 			<Dialog
 	          open={this.state.dialogOpen}

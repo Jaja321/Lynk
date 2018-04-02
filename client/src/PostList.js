@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Paper from './Paper.js';
+import Post from './Post.js';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
@@ -14,7 +14,7 @@ class PostList extends Component {
 		var postElements=[];
 		var posts=this.state.posts;
 		for(var i=0 ;i<this.state.posts.length;i++){
-			postElements.push(<Paper post={posts[i]}/>);
+			postElements.push(<Post post={posts[i]}/>);
 		}
 		return (
 			<div className="postsWrapper">
