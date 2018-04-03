@@ -87,7 +87,14 @@ class AddPost extends Component{
 	}
 
 	handleClick(){
-		this.setState({dialogOpen: true});
+    if(this.props.user)
+		  this.setState({dialogOpen: true});
+    else
+      this.props.showSnackbar(
+        <span>
+        You must be logged in to post a new link
+        </span>
+        );
 	}
 
 	handleCancel(){

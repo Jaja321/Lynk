@@ -148,21 +148,22 @@ app.post('/posts', (req,res)=>{
 //TODO: validate, check if user already exists
 app.post('/signup', (req,res)=>{
 	console.log("in signup");
-	var username=req.body.username;
+	const username=req.body.username;
 	User.findOne({username: {$regex: new RegExp(username, "i")}}).exec().then(user=>{
 		if(user){
-			res.json({error: 'User not found'});
+			res.json({error: 'Sorry, the username is taken. Please choose another one.'});
 			return Promise.reject("Username already exists");
 		}
-		var password=req.body.password;
+		const password=req.body.password;
 		bcrypt.hash(password, 8).then(hash=>{
-			var user={};
-			user.username=req.body.username;
+			let user={};
+			user.username=username;
 			user.passwordHash=hash;
 			return User.create(user);
-		}).then(newUser=>{
+		}).then(newUser=>{	
+			var token= jwt.sign({username: newUser.username}, 'banana'); //TODO: put secret in .env
+			res.json({token: token, username: newUser.username});
 			console.log("Registerd successfully");
-			res.send("Registered successfully");
 		});
 	}).catch(err=>{
 		console.log(err);

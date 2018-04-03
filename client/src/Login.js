@@ -21,7 +21,6 @@ class Login extends Component{
 			dialogOpen : false,
 			usernameValue: "",
 			passwordValue:"",
-			snackbarOpen: false,
 			tab: 0,
 			errorMessage:""
 		};
@@ -96,6 +95,10 @@ class Login extends Component{
 
 	handleChange(field){
 		return event=>{
+			if(event.target.value.indexOf(' ')>-1){
+				console.log("heyaaa");
+				return;
+			}
 			this.setState({[field+'Value']: event.target.value});
 		};
 	}
@@ -121,6 +124,7 @@ class Login extends Component{
 			if(res.error){
 				this.setState({errorMessage: res.error});
 			}else{
+				this.props.showSnackbar(<span>Welcome, {res.username}!</span>);
 				cookies.set('token', res.token, {path: '/'});
 				cookies.set('user', res.username, {path: '/'});
 				this.setState({dialogOpen: false, errorMessage: ""});

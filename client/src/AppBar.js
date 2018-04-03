@@ -39,7 +39,7 @@ class ButtonAppBar extends Component {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton onClick={this.toggleDrawer(true)} className={classes.menuButton} color="inherit" aria-label="Menu">
+          <IconButton onClick={this.toggleDrawer(true)} className={classes.menuButton} color="inherit">
             <MenuIcon />
           </IconButton>
           <Typography variant="title" color="inherit">
@@ -47,7 +47,7 @@ class ButtonAppBar extends Component {
           </Typography>
           <div style={{marginLeft: 'auto', display: 'flex', alignItems: 'center'}}>
           <SortSelect setSort={this.props.setSort}/>
-          {this.props.user ? <UserTag user={this.props.user}/> :<Login setUser={this.props.setUser}/>}
+          {this.props.user ? <UserTag user={this.props.user}/> :<Login setUser={this.props.setUser} showSnackbar={this.props.showSnackbar}/>}
           </div>
         </Toolbar>
       </AppBar>

@@ -75,6 +75,10 @@ class Post extends Component{
 
   vote(up){
     return ()=>{
+        if(!this.props.user){
+          this.props.showSnackbar(<span>You must be logged in to vote</span>);
+          return;
+        }
         var voteType;
         const post=this.state.post;
         if(up && post.upvote || !up && post.downvote)

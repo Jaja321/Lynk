@@ -11,10 +11,17 @@ class PostList extends Component {
 	}
 
 	render(){
-		var postElements=[];
-		var posts=this.state.posts;
-		for(var i=0 ;i<this.state.posts.length;i++){
-			postElements.push(<Post post={posts[i]}/>);
+		const postElements=[];
+		const posts=this.state.posts;
+		for(let i=0 ;i<posts.length;i++){
+			postElements.push(
+				<Post
+				key={posts[i]._id}
+				post={posts[i]}
+				user={this.props.user}
+				showSnackbar={this.props.showSnackbar}
+				/>
+				);
 		}
 		return (
 			<div className="postsWrapper">
