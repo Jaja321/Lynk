@@ -6,6 +6,11 @@ import SnackbarMessage from './Snackbar.js';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import blue from 'material-ui/colors/blue';
 import Cookies from 'universal-cookie';
+import { Provider } from 'react-redux'
+import configureStore from './store.js'
+import { loadAuthToken } from './actions.js'
+
+const store = configureStore();
 
 const cookies = new Cookies();
 
@@ -28,6 +33,7 @@ class App extends Component {
 
 	render() {
 		return (
+		<Provider store= {store}>
 		<MuiThemeProvider theme={theme}>
 		  <div className="App">
 		  	<ButtonAppBar
@@ -49,7 +55,7 @@ class App extends Component {
 		  	/>
 		  </div>
 		  </MuiThemeProvider>
-
+		  </Provider>
 		);
 	}
 

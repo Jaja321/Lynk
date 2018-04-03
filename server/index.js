@@ -149,6 +149,10 @@ app.post('/posts', (req,res)=>{
 app.post('/signup', (req,res)=>{
 	console.log("in signup");
 	const username=req.body.username;
+	if(/\s/.test(username)){
+		res.json({error: "Username can't contain whitespace"});
+		return;
+	}
 	User.findOne({username: {$regex: new RegExp(username, "i")}}).exec().then(user=>{
 		if(user){
 			res.json({error: 'Sorry, the username is taken. Please choose another one.'});

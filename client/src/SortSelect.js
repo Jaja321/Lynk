@@ -4,16 +4,17 @@ import { MenuItem } from 'material-ui/Menu';
 import Input, {InputLabel} from 'material-ui/Input';
 import Typography from 'material-ui/Typography';
 import { FormControl, FormHelperText } from 'material-ui/Form';
+import { connect } from 'react-redux'
+import {setSort, fetchPosts} from './actions';
 
 class SortSelect extends Component{
-  state={value: "hot"};
 
   render(){
     return(
        <FormControl style={{marginRight: 20, width: 100}}>
           <InputLabel style={{color: 'white'}}>Sort by</InputLabel>
           <Select
-            value={this.state.value}
+            value={this.props.value}
             onChange={this.handleChange}
             style={{color: 'white'}}
           >
@@ -27,9 +28,12 @@ class SortSelect extends Component{
   }
 
   handleChange=(event)=>{
-    this.setState({value: event.target.value});
-    this.props.setSort(event.target.value);
+    const {dispatch} = this.props;
+    dispatch(setSort(event.target.value));
+    dispatch(fetchPosts());
   }
 }
 
-export default SortSelect;
+const mapStateToProps = state=>({value: state.sort})
+
+export default connect(mapStateToProps)(SortSelect);

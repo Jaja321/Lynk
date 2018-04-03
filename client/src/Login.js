@@ -95,10 +95,6 @@ class Login extends Component{
 
 	handleChange(field){
 		return event=>{
-			if(event.target.value.indexOf(' ')>-1){
-				console.log("heyaaa");
-				return;
-			}
 			this.setState({[field+'Value']: event.target.value});
 		};
 	}

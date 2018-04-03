@@ -81,7 +81,7 @@ class Post extends Component{
         }
         var voteType;
         const post=this.state.post;
-        if(up && post.upvote || !up && post.downvote)
+        if((up && post.upvote) || (!up && post.downvote))
           voteType = 'unvote';
         else if(up)
           voteType = 'upvote';
