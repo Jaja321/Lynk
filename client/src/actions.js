@@ -1,3 +1,4 @@
+import isUrl from 'is-url';
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
@@ -11,14 +12,21 @@ export function setSort(sort){
 
 export function fetchPosts(){
   return (dispatch, getState) => {
-    const { sort, token, user } = getState().general;
+    const { sort, token, user, page } = getState().general;
     let url = '/posts/'+sort;
+    url+='?page='+page;
     if(user)
-      url+='?token=' + token;
+      url+='&token=' + token;
     fetch(url).then(result=>{
       return result.json();
     }).then(result=>{
-      dispatch(setPosts(result));
+      if(result.length>0){
+        dispatch(setPosts(result));
+        dispatch(showTransition());
+        setTimeout(()=>{dispatch({type: 'SHOW_PAGINATION'})},1000);
+      }else{
+        dispatch(prevPage());
+      }
     });
   } 
 }
@@ -93,6 +101,10 @@ export function login(){
 export function submitPost(){
   return (dispatch, getState) => {
     const values = getState().addPostDialog;
+    if(!isUrl(values.url)){
+      dispatch(popSnackbar('Please enter a valid URL.'));
+      return;
+    }
     fetch('/posts', getPayload({
       title: values.title,
       url: values.url,
@@ -104,6 +116,8 @@ export function submitPost(){
         dispatch(popSnackbar('Subission failed. Please try again.'));
     });
     dispatch(closeAddPostDialog());
+    dispatch(setSort('new'));
+    dispatch(fetchPosts());
   }
 }
 
@@ -246,3 +260,23 @@ export function downvote(post){
     }
   }
 }
+
+function showTransition(){
+  return (dispatch, getState) => {
+    dispatch({type: "TRANS_OFF"});
+    dispatch({type: "TRANS_ON"});
+  }
+}
+
+export function nextPage(){
+  return {
+    type: "NEXT_PAGE"
+  }
+}
+
+export function prevPage(){
+  return {
+    type: "PREV_PAGE"
+  }
+}
+

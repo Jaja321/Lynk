@@ -1,12 +1,7 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { withStyles } from 'material-ui/styles';
 import NavDrawer from 'material-ui/Drawer';
-import Button from 'material-ui/Button';
-import {List, ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import InboxIcon from 'material-ui-icons/MoveToInbox';
-import DraftsIcon from 'material-ui-icons/Drafts';
 import DrawerList from './DrawerList.js';
 import { connect } from 'react-redux';
 import { closeDrawer } from '../actions';

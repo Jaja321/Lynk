@@ -4,6 +4,7 @@ import { withStyles } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import Icon from 'material-ui/Icon';
+import Grow from 'material-ui/transitions/Grow';
 import ta from 'time-ago'
 
 const styles = {
@@ -29,11 +30,21 @@ class Post extends Component{
   render(){
     const { classes, post } = this.props;
     return (
+      <Grow in={this.props.trans} timeout={this.props.timeout}>
       <div>
-        <Paper className={classes.root} elevation={4}>
-          <Typography variant="headline" component="h3" align="left" style={textStyle}>
+        <Paper className={classes.root} elevation={4}> 
+          <Typography
+          variant="headline"
+          component="h3"
+          align="left"
+          style={textStyle}
+          onClick={()=>{window.open(post.url)}}
+          >
+          <div className="clickable">
             {post.title}
+          </div>
           </Typography>
+          
           <Typography variant="subheading" align="left" style={textStyle}>
             Posted by {post.author} {ta.ago(new Date(post.posted_at))}
           </Typography>
@@ -56,6 +67,7 @@ class Post extends Component{
           </Icon>
         </Paper>
       </div>
+      </Grow>
     );
   }
 

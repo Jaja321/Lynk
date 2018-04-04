@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Post from './Post.js';
+import PaginationButtons from './PaginationButtons.js';
+import Grow from 'material-ui/transitions/Grow';
 import { connect } from 'react-redux'
-import { fetchPosts, upvote, downvote } from '../actions.js'
+import { fetchPosts, upvote, downvote, nextPage, prevPage } from '../actions.js'
 
 class PostList extends Component {
   componentDidMount(){
@@ -11,27 +13,48 @@ class PostList extends Component {
   render(){
     const {posts} = this.props;
     console.log("posts updated");
-    const postElements = posts.map(post=>(
+    const postElements = posts.map((post, i)=>(
       <Post
       key={post._id}
       post={post}
       upvote = {this.props.upvote(post)}
       downvote = {this.props.downvote(post)}
+      trans= {this.props.trans}
+      timeout= {200*(i+2)}
       />
     ));
     return (
       <div className="postsWrapper">
         {postElements}
+        {this.props.showPagination? <PaginationButtons
+          firstPage= {this.props.page == 1}
+          nextPage= {this.props.nextPage}
+          prevPage= {this.props.prevPage}
+          /> : null}
       </div>
     );
   }
 }
 
-const mapStateToProps = state=>({ posts: state.general.posts, user: state.general.user });
+const mapStateToProps = state=>({
+  posts: state.general.posts,
+  user: state.general.user,
+  trans: state.general.transitionFlag,
+  showPagination: state.general.showPagination,
+  page: state.general.page
+});
 const mapDispatchToProps = dispatch => ({
   fetchPosts: ()=>{dispatch(fetchPosts())},
   upvote: post => () => {dispatch(upvote(post));},
-  downvote: post => () => {dispatch(downvote(post));}
+  downvote: post => () => {dispatch(downvote(post))},
+  nextPage: ()=>{
+    dispatch(nextPage());
+    dispatch(fetchPosts());
+  },
+  prevPage: ()=>{
+    dispatch(prevPage());
+    dispatch(fetchPosts());
+  }
 });
 
 export default connect(mapStateToProps,mapDispatchToProps)(PostList);

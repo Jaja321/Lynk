@@ -9,6 +9,11 @@ body {
 	margin: auto;
 }
 
+.clickable:hover{
+	cursor: pointer;
+	color: #285fb7;
+}
+
 a:hover{
 	cursor: pointer;
 }
@@ -20,4 +25,8 @@ a:hover{
 .thumb:hover{
 	cursor: pointer;
 	color: rgba(0, 0, 0, 0.80);
+}
+
+.ml{
+	margin-left: 10px;
 }

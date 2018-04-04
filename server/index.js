@@ -16,6 +16,8 @@ var User= require('./User.js');
 
 const scoreExp= {$subtract: [{$size: '$upvoted'},{$size: '$downvoted'}]};
 
+const pageSize= 5;
+
 function getAggregationStages(req){
   var token= req.query.token;
   var username= '';
@@ -46,21 +48,28 @@ function getAggregationStages(req){
 }
 
 
-
 app.get('/posts/top', (req,res)=>{
-  Post.aggregate(getAggregationStages(req)).sort({'score':-1}).exec((err,posts)=>{
-    console.log(posts);
+  const page= parseInt(req.query.page);
+  if(!page)
+    page= 1;
+  Post.aggregate(getAggregationStages(req)).sort({'score':-1}).skip((page-1)*pageSize).limit(pageSize).exec((err,posts)=>{
     res.json(posts);
   });
 });
 
 app.get('/posts/new', (req,res)=>{
-  Post.aggregate(getAggregationStages(req)).sort({'posted_at':-1}).exec((err,posts)=>{
+  const page= parseInt(req.query.page);
+  if(!page)
+    page= 1;
+  Post.aggregate(getAggregationStages(req)).sort({'posted_at':-1}).skip((page-1)*pageSize).limit(pageSize).exec((err,posts)=>{
     res.json(posts);
   });
 });
 
 app.get('/posts/hot', (req,res)=>{
+  const page= parseInt(req.query.page);
+  if(!page)
+    page= 1;
   var aggregationStages=getAggregationStages(req);
   aggregationStages.push({
     $addFields : {
@@ -74,7 +83,7 @@ app.get('/posts/hot', (req,res)=>{
       }
     }
   });
-  Post.aggregate(aggregationStages).sort({'hotness': -1}).exec((err,posts)=>{
+  Post.aggregate(aggregationStages).sort({'hotness': -1}).skip((page-1)*pageSize).limit(pageSize).exec((err,posts)=>{
     res.json(posts);
   });
 });

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import ButtonAppBar from './AppBar.js';
 import PostList from './PostList.js';
 import AddPost from './AddPost.js';
@@ -11,25 +11,25 @@ import configureStore from '../store.js'
 
 const store = configureStore();
 const theme = createMuiTheme({
-	palette: {
-	    primary: blue,
-	  }
+  palette: {
+      primary: blue,
+    }
 });
 
 function App(props){
-	return (
-  	<Provider store= {store}>
-  	<MuiThemeProvider theme={theme}>
-	  <div className="App">
-	  	<ButtonAppBar/>
-	  	<PostList />
-	  	<AddPost/>
+  return (
+    <Provider store= {store}>
+    <MuiThemeProvider theme={theme}>
+    <div className="App">
+      <ButtonAppBar/>
+      <PostList />
+      <AddPost/>
       <LoginDialog/>
-	  	<SnackbarMessage/>
-	  </div>
-	  </MuiThemeProvider>
-	  </Provider>
-	);
+      <SnackbarMessage/>
+    </div>
+    </MuiThemeProvider>
+    </Provider>
+  );
 }
 
 export default App;

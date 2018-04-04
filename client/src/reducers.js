@@ -10,12 +10,15 @@ function general(state= {
   posts: [],
   token: authToken,
   user,
-  drawerOpen: false
+  drawerOpen: false,
+  transitionFlag: true,
+  showPagination: false,
+  page: 1
   }, action){
   var newPosts;
   switch(action.type){
   case 'SET_SORT':
-    return Object.assign({}, state, {sort: action.sort});
+    return Object.assign({}, state, {sort: action.sort, page: 1});
   case 'SET_TOKEN':
     return Object.assign({}, state, {token: action.token});
   case 'SET_POSTS':
@@ -26,8 +29,21 @@ function general(state= {
     return Object.assign({}, state, {drawerOpen: true});
   case 'CLOSE_DRAWER':
     return Object.assign({}, state, {drawerOpen: false});
+  case 'TRANS_OFF':
+    return Object.assign({}, state, {transitionFlag: false});
+  case 'TRANS_ON':
+    return Object.assign({}, state, {transitionFlag: true});
   case 'LOGOUT':
     return Object.assign({}, state, {user: null});
+  case 'SHOW_PAGINATION':
+    return Object.assign({}, state, {showPagination: true});
+  case 'NEXT_PAGE':
+    return Object.assign({}, state, {page: state.page+1});
+  case 'PREV_PAGE':
+    if(state.page==1)
+      return state;
+    else
+      return Object.assign({}, state, {page: state.page-1});
   case 'INC_SCORE':
 
     newPosts= state.posts.map(post => {

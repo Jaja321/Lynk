@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Select from 'material-ui/Select';
 import { MenuItem } from 'material-ui/Menu';
-import Input, {InputLabel} from 'material-ui/Input';
+import {InputLabel} from 'material-ui/Input';
 import Typography from 'material-ui/Typography';
-import { FormControl, FormHelperText } from 'material-ui/Form';
+import { FormControl } from 'material-ui/Form';
 import { connect } from 'react-redux'
 import {setSort, fetchPosts} from '../actions';
 
