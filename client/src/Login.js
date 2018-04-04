@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
-import Cookies from 'universal-cookie';
 import Dialog, {
   DialogActions,
   DialogContent,
@@ -10,126 +9,93 @@ import Dialog, {
   DialogTitle,
 } from 'material-ui/Dialog';
 import Tabs, { Tab } from 'material-ui/Tabs';
-
-const cookies = new Cookies();
+import {
+  updateInputValue,
+  login,
+  openLoginDialog,
+  closeLoginDialog,
+  toggleLoginTab
+} from './actions.js'
+import { connect } from 'react-redux';
 
 class Login extends Component{
+  openDialog = () => {
+    this.props.dispatch(openLoginDialog());
+  }
 
-	constructor(props){
-		super(props);
-		this.state={
-			dialogOpen : false,
-			usernameValue: "",
-			passwordValue:"",
-			tab: 0,
-			errorMessage:""
-		};
-		this.handleClick= this.handleClick.bind(this);
-		this.handleCancel= this.handleCancel.bind(this);
-		this.handleTabChange= this.handleTabChange.bind(this);
-		this.handleSubmit= this.handleSubmit.bind(this);
-	}
+  closeDialog = () => {
+    this.props.dispatch(closeLoginDialog());
+  }
 
-	gotoSignup = () =>{
-		this.setState({tab : 1});
-	}
+  toggleTab = () => {
+    this.props.dispatch(toggleLoginTab());
+  }
 
-	render(){
-		var suggestSignup= this.state.tab==1?  null: (
-			<Typography variant="p" style={{marginTop: 10}}>
-			Don't have a user yet? <a onClick={this.gotoSignup}>Sign up</a>
-			</Typography>
-			);
-		return (
-			<div>
-			<Button color="inherit" onClick={this.handleClick}>Login</Button>
-			<Dialog
-	          open={this.state.dialogOpen}
-	          onClose={this.handleClose}
-	        >
-	          <Tabs value={this.state.tab} onChange={this.handleTabChange}>
-	            <Tab label="Login" />
-	            <Tab label="Sign Up" />
-	          </Tabs>
-	          <DialogContent>
-	          	{suggestSignup}
-	            <TextField
-	              autoFocus
-	              onChange={this.handleChange('username')}
-	              margin="dense"
-	              label="Username"
-	              value={this.state.titleValue}
-	              type="email"
-	              fullWidth
-	            />
-	            <TextField
-	           	  onChange={this.handleChange('password')}
-	              margin="dense"
-	              label="Password"
-	              type="password"
-	              value={this.state.urlValue}
-	              fullWidth
-	            />
-	            <Typography variant="body2" color="secondary" style={{marginTop: 5}}>{this.state.errorMessage}</Typography>
-	          </DialogContent>
-	          <DialogActions>
-	            <Button onClick={this.handleCancel} color="primary">
-	              Cancel
-	            </Button>
-	            <Button onClick={this.handleSubmit} color="primary">
-	              {this.state.tab==0? 'Login': 'Sign Up'}
-	            </Button>
-	          </DialogActions>
-	        </Dialog>
-	        </div>
-			);
-	}
+  login = () => {
+    this.props.dispatch(login());
+  }
 
-	handleClick(){
-		this.setState({dialogOpen: true});
-	}
+  handleValueChange = (field) => (event) => {
+    this.props.dispatch(updateInputValue(field, event.target.value));
+  }
 
-	handleCancel(){
-		this.setState({dialogOpen: false});
-	}
-
-	handleChange(field){
-		return event=>{
-			this.setState({[field+'Value']: event.target.value});
-		};
-	}
-
-	handleTabChange(event, value){
-		this.setState({tab: value});
-	}
-
-	handleSubmit(){	
-		fetch('/'+(this.state.tab==0? 'login': 'signup'), {
-		  method: 'POST',
-		  headers: {
-		    'Accept': 'application/json',
-		    'Content-Type': 'application/json',
-		  },
-		  body: JSON.stringify({
-		    username: this.state.usernameValue,
-		    password: this.state.passwordValue,
-		  })
-		}).then(response=>{
-			return response.json();
-		}).then(res=>{
-			if(res.error){
-				this.setState({errorMessage: res.error});
-			}else{
-				this.props.showSnackbar(<span>Welcome, {res.username}!</span>);
-				cookies.set('token', res.token, {path: '/'});
-				cookies.set('user', res.username, {path: '/'});
-				this.setState({dialogOpen: false, errorMessage: ""});
-				this.props.setUser();
-				
-			}
-		});			
-		
-	}
+  render(){
+    var suggestSignup= this.props.tab==1?  null: (
+      <Typography variant="body1" style={{marginTop: 10}}>
+        Don't have a user yet? <a onClick={this.toggleTab}>Sign up</a>
+      </Typography>
+      );
+    return (
+      <div>
+      <Button color="inherit" onClick={this.openDialog}>Login</Button>
+      <Dialog
+        open={this.props.open}
+        onClose={this.closeDialog}
+      >
+        <Tabs
+        value={this.props.tab}
+        onChange={this.toggleTab}
+        >
+          <Tab label="Login" />
+          <Tab label="Sign Up" />
+        </Tabs>
+        <DialogContent>
+          {suggestSignup}
+          <TextField
+            autoFocus
+            onChange={this.handleValueChange('username')}
+            margin="dense"
+            label="Username"
+            value={this.props.username}
+            type="email"
+            fullWidth
+          />
+          <TextField
+            onChange={this.handleValueChange('password')}
+            margin="dense"
+            label="Password"
+            type="password"
+            value={this.props.password}
+            fullWidth
+          />
+          <Typography variant="body2" color="secondary" style={{marginTop: 5}}>
+            {this.props.error}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.closeDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={this.login} color="primary">
+            {this.props.tab==0? 'Login': 'Sign Up'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </div>
+      );
+  }
 }
 
-export default Login;
+const mapStateToProps = state=>({...state.loginDialog })
+
+export default connect(mapStateToProps)(Login);

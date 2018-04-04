@@ -23,12 +23,8 @@ const theme = createMuiTheme({
 class App extends Component {
 	constructor(props){
 		super(props);
-		this.state={postListSort: "hot", snackbarOpen: false, message: ''};
+		this.state={};
 		this.setUser=this.setUser.bind(this);
-		this.setSort=this.setSort.bind(this);
-		this.showSnackbar=this.showSnackbar.bind(this);
-		this.closeSnackbar=this.closeSnackbar.bind(this);
-		
 	}
 
 	render() {
@@ -39,20 +35,12 @@ class App extends Component {
 		  	<ButtonAppBar
 		  	user={this.state.user}
 		  	setUser={this.setUser}
-		  	setSort={this.setSort}
-		  	showSnackbar={this.showSnackbar}
 		  	/>
 		  	<PostList 
-		  	sort={this.state.postListSort}
 		  	user={this.state.user}
-		  	showSnackbar={this.showSnackbar}
 		  	/>
-		  	<AddPost user={this.state.user} showSnackbar={this.showSnackbar}/>
-		  	<SnackbarMessage
-		  	message={this.state.message}
-		  	open={this.state.snackbarOpen}
-		  	close={this.closeSnackbar}
-		  	/>
+		  	<AddPost user={this.state.user}/>
+		  	<SnackbarMessage/>
 		  </div>
 		  </MuiThemeProvider>
 		  </Provider>
@@ -70,20 +58,6 @@ class App extends Component {
 		else
 			this.setState({user: null});
 	}
-
-	setSort(sort){
-		this.setState({postListSort: sort});
-	}
-
-	showSnackbar(message){
-		this.setState({message: message, snackbarOpen: true});
-	}
-
-	closeSnackbar(){
-		this.setState({snackbarOpen: false});
-	}
-
-
 }
 
 export default App;

@@ -34,6 +34,6 @@ class SortSelect extends Component{
   }
 }
 
-const mapStateToProps = state=>({value: state.sort})
+const mapStateToProps = state=>({value: state.general.sort})
 
 export default connect(mapStateToProps)(SortSelect);

@@ -46,8 +46,8 @@ class ButtonAppBar extends Component {
             Lynk
           </Typography>
           <div style={{marginLeft: 'auto', display: 'flex', alignItems: 'center'}}>
-          <SortSelect setSort={this.props.setSort}/>
-          {this.props.user ? <UserTag user={this.props.user}/> :<Login setUser={this.props.setUser} showSnackbar={this.props.showSnackbar}/>}
+          <SortSelect/>
+          {this.props.user ? <UserTag user={this.props.user}/> :<Login setUser={this.props.setUser}/>}
           </div>
         </Toolbar>
       </AppBar>

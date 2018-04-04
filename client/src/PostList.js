@@ -26,6 +26,6 @@ class PostList extends Component {
 	}
 }
 
-const mapStateToProps = state=>({ posts: state.posts })
+const mapStateToProps = state=>({ posts: state.general.posts })
 
 export default connect(mapStateToProps)(PostList);
