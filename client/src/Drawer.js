@@ -8,6 +8,8 @@ import Divider from 'material-ui/Divider';
 import InboxIcon from 'material-ui-icons/MoveToInbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
 import DrawerList from './DrawerList.js';
+import { connect } from 'react-redux';
+import { closeDrawer } from './actions';
 
 const styles = {
   list: {
@@ -19,29 +21,25 @@ const styles = {
 };
 
 class Drawer extends React.Component {
-  state = {
-    drawerOpen: false
-  };
-
-  
+  closeMe = () => {
+      this.props.dispatch(closeDrawer());
+    }
 
   render() {
     const { classes } = this.props;
-
-
     return (
       <div>
         <NavDrawer
           open={this.props.open}
-          onClose={this.props.closeDrawer}
+          onClose={this.closeMe}
         >
           <div
             tabIndex={0}
             role="button"
-            onClick={this.props.closeDrawer}
-            onKeyDown={this.props.closeDrawer}
+            onClick={this.closeMe}
+            onKeyDown={this.closeMe}
           >
-            <DrawerList setUser={this.props.setUser}/>
+            <DrawerList/>
           </div>
         </NavDrawer>
       
@@ -50,4 +48,6 @@ class Drawer extends React.Component {
   }
 }
 
-export default withStyles(styles)(Drawer);
+const mapStateToProps = state=>({open : state.general.drawerOpen});
+
+export default connect(mapStateToProps)(withStyles(styles)(Drawer));

@@ -2,16 +2,21 @@ import React, { Component } from 'react';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
-import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
 import Cookies from 'universal-cookie';
 import Dialog, {
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
 } from 'material-ui/Dialog';
 import Snackbar from 'material-ui/Snackbar';
+import {
+  updateAddPost,
+  closeAddPostDialog,
+  openAddPostDialog,
+  submitPost,
+} from './actions.js'
+import { connect } from 'react-redux';
 
 const cookies = new Cookies();
 
@@ -24,111 +29,72 @@ const style={
 };
 
 class AddPost extends Component{
-	constructor(props){
-		super(props);
-		this.state={dialogOpen : false, titleValue: "", urlValue:"", snackbarOpen: false};
-		this.handleClick= this.handleClick.bind(this);
-		this.handleCancel= this.handleCancel.bind(this);
-		this.handleSubmit= this.handleSubmit.bind(this);
-		this.closeSnackbar= this.closeSnackbar.bind(this);
-	}
+  openDialog = () => {
+    this.props.dispatch(openAddPostDialog(this.props.user));
+  }
+
+  closeDialog = () =>{
+    this.props.dispatch(closeAddPostDialog());
+  }
+
+  handleValueChange = (field) => (event) => {
+    this.props.dispatch(updateAddPost(field, event.target.value));
+  }
+
+  submitPost = () => {
+    this.props.dispatch(submitPost());
+  }
+
 	render(){
 		const { classes } = this.props;
 		return(
-		<div>
-		<Button onClick={this.handleClick} variant="fab" color="primary" aria-label="add" className={classes.buttonStyle}>
-	        <AddIcon />
-	    </Button>
-		<Dialog
-          open={this.state.dialogOpen}
-          onClose={this.handleClose}
-        >
+  		<div>
+  		<Button
+      onClick={this.openDialog}
+      variant="fab"
+      color="primary"
+      aria-label="add"
+      className={classes.buttonStyle}>
+  	    <AddIcon />
+  	  </Button>
+  		<Dialog
+        open={this.props.open}
+        onClose={this.closeDialog}
+      >
           <DialogTitle>Add Link</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
-              onChange={this.handleChange('title')}
+              onChange={this.handleValueChange('title')}
               margin="dense"
               label="Title"
-              value={this.state.titleValue}
+              value={this.props.title}
               type="email"
               fullWidth
             />
             <TextField
-           	  onChange={this.handleChange('url')}
+           	  onChange={this.handleValueChange('url')}
               margin="dense"
               label="Link"
-              value={this.state.urlValue}
+              value={this.props.url}
               type="email"
               fullWidth
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleCancel} color="primary">
+            <Button onClick={this.closeDialog} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleSubmit} color="primary">
+            <Button onClick={this.submitPost} color="primary">
               Submit
             </Button>
           </DialogActions>
         </Dialog>
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          open={this.state.snackbarOpen}
-          autoHideDuration={2000}
-          message={"Submitted successfully"}
-          onClose={this.closeSnackbar}
-        />
         </div>
 	    );
 	}
-
-	handleClick(){
-    if(this.props.user)
-		  this.setState({dialogOpen: true});
-    else
-      this.props.showSnackbar(
-        <span>
-        You must be logged in to post a new link
-        </span>
-        );
-	}
-
-	handleCancel(){
-		this.setState({dialogOpen: false});
-	}
-
-	handleChange(field){
-		return event=>{
-			this.setState({[field+'Value']: event.target.value});
-		};
-	}
-
-	handleSubmit(){
-		var token=cookies.get('token');
-		fetch('/posts', {
-		  method: 'POST',
-		  headers: {
-		    'Accept': 'application/json',
-		    'Content-Type': 'application/json',
-		  },
-		  body: JSON.stringify({
-		    title: this.state.titleValue,
-		    url: this.state.urlValue,
-		    token: token
-		  })
-		});
-		this.setState({dialogOpen: false, snackbarOpen: true});
-	}
-
-	closeSnackbar(){
-		this.setState({snackbarOpen: false});
-	}
 }
 
+const mapStateToProps = state=>({...state.addPostDialog, user: state.general.user });
 
-
-export default withStyles(style)(AddPost);
+export default connect(mapStateToProps)(withStyles(style)(AddPost));

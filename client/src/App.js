@@ -2,62 +2,35 @@ import React, { Component } from 'react';
 import ButtonAppBar from './AppBar.js';
 import PostList from './PostList.js';
 import AddPost from './AddPost.js';
+import LoginDialog from './LoginDialog.js';
 import SnackbarMessage from './Snackbar.js';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import blue from 'material-ui/colors/blue';
-import Cookies from 'universal-cookie';
 import { Provider } from 'react-redux'
 import configureStore from './store.js'
 import { loadAuthToken } from './actions.js'
 
 const store = configureStore();
-
-const cookies = new Cookies();
-
 const theme = createMuiTheme({
 	palette: {
 	    primary: blue,
 	  }
 });
 
-class App extends Component {
-	constructor(props){
-		super(props);
-		this.state={};
-		this.setUser=this.setUser.bind(this);
-	}
-
-	render() {
-		return (
-		<Provider store= {store}>
-		<MuiThemeProvider theme={theme}>
-		  <div className="App">
-		  	<ButtonAppBar
-		  	user={this.state.user}
-		  	setUser={this.setUser}
-		  	/>
-		  	<PostList 
-		  	user={this.state.user}
-		  	/>
-		  	<AddPost user={this.state.user}/>
-		  	<SnackbarMessage/>
-		  </div>
-		  </MuiThemeProvider>
-		  </Provider>
-		);
-	}
-
-	componentDidMount(){
-		this.setUser();
-	}
-
-	setUser(){
-		var user= cookies.get('user');
-		if(user)
-			this.setState({user: user});
-		else
-			this.setState({user: null});
-	}
+function App(props){
+	return (
+  	<Provider store= {store}>
+  	<MuiThemeProvider theme={theme}>
+	  <div className="App">
+	  	<ButtonAppBar/>
+	  	<PostList />
+	  	<AddPost/>
+      <LoginDialog/>
+	  	<SnackbarMessage/>
+	  </div>
+	  </MuiThemeProvider>
+	  </Provider>
+	);
 }
 
 export default App;

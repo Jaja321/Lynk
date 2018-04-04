@@ -9,8 +9,10 @@ function general(state= {
   sort: 'hot',
   posts: [],
   token: authToken,
-  user
+  user,
+  drawerOpen: false
   }, action){
+  var newPosts;
   switch(action.type){
   case 'SET_SORT':
     return Object.assign({}, state, {sort: action.sort});
@@ -20,7 +22,43 @@ function general(state= {
     return Object.assign({}, state, {posts: action.posts});
   case 'SET_USER':
     return Object.assign({}, state, {user: action.username});
-  case 'SET_POSTS':
+  case 'OPEN_DRAWER':
+    return Object.assign({}, state, {drawerOpen: true});
+  case 'CLOSE_DRAWER':
+    return Object.assign({}, state, {drawerOpen: false});
+  case 'LOGOUT':
+    return Object.assign({}, state, {user: null});
+  case 'INC_SCORE':
+
+    newPosts= state.posts.map(post => {
+      if(post._id == action.id)
+        return Object.assign({}, post, {score: (post.score+action.amount)} );
+      else
+        return post;
+    });
+    return Object.assign({}, state, {posts: newPosts});
+  case 'SET_VOTE':
+    newPosts= state.posts.map(post => {
+      const changes = {};
+      if(post._id == action.id){
+        switch(action.dir){
+          case 1:
+            changes.upvote = true;
+            changes.downvote = false;
+            break;
+          case -1:
+            changes.upvote = false;
+            changes.downvote = true;
+            break;
+          default:
+            changes.upvote = false;
+            changes.downvote = false;
+            break;
+        }
+      }
+      return Object.assign({}, post, changes);
+    });
+    return Object.assign({}, state, {posts: newPosts});
   default:
     return state;
   }
@@ -63,4 +101,23 @@ function loginDialog(state= {
   }
 }
 
-export default combineReducers({snackbar,general,loginDialog});
+function addPostDialog(state= {
+  title: '',
+  url: '',
+  error: '',
+  open: false,
+  }, action){
+  switch(action.type){
+    case 'UPDATE_ADDPOST':
+      return Object.assign({}, state, {[action.field]: action.value});
+    case 'OPEN_ADDPOST_DIALOG':
+      return Object.assign({}, state, {open: true});
+    case 'CLOSE_ADDPOST_DIALOG':
+      return Object.assign({}, state, {open: false});
+    default:
+      return state;
+  }
+}
+
+
+export default combineReducers({snackbar,general,loginDialog, addPostDialog});

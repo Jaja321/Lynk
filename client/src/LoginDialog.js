@@ -12,17 +12,12 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import {
   updateInputValue,
   login,
-  openLoginDialog,
   closeLoginDialog,
   toggleLoginTab
 } from './actions.js'
 import { connect } from 'react-redux';
 
-class Login extends Component{
-  openDialog = () => {
-    this.props.dispatch(openLoginDialog());
-  }
-
+class LoginDialog extends Component{
   closeDialog = () => {
     this.props.dispatch(closeLoginDialog());
   }
@@ -46,8 +41,6 @@ class Login extends Component{
       </Typography>
       );
     return (
-      <div>
-      <Button color="inherit" onClick={this.openDialog}>Login</Button>
       <Dialog
         open={this.props.open}
         onClose={this.closeDialog}
@@ -91,11 +84,10 @@ class Login extends Component{
           </Button>
         </DialogActions>
       </Dialog>
-      </div>
       );
   }
 }
 
-const mapStateToProps = state=>({...state.loginDialog })
+const mapStateToProps = state=>({...state.loginDialog });
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(LoginDialog);

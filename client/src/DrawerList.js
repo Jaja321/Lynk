@@ -2,15 +2,14 @@ import React, { Component }from 'react';
 import List, {ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import PowerSettingsNewIcon from 'material-ui-icons/PowerSettingsNew';
 import Typography from 'material-ui/Typography';
-import Cookies from 'universal-cookie';
-
-const cookies = new Cookies();
+import { connect } from 'react-redux';
+import { logout, fetchPosts } from './actions';
 
 class DrawerList extends React.Component {
 
   logout=()=>{
-    cookies.remove('user');
-    this.props.setUser();
+    this.props.dispatch(logout());
+    this.props.dispatch(fetchPosts());
   }
 
   render(){
@@ -27,4 +26,4 @@ class DrawerList extends React.Component {
   }
 }
 
-export default DrawerList;
+export default connect()(DrawerList);
