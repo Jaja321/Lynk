@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Post from './Post.js';
 import { connect } from 'react-redux'
-import { fetchPosts, upvote, downvote } from './actions.js'
+import { fetchPosts, upvote, downvote } from '../actions.js'
 
 class PostList extends Component {
   componentDidMount(){

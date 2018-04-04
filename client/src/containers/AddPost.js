@@ -15,7 +15,7 @@ import {
   closeAddPostDialog,
   openAddPostDialog,
   submitPost,
-} from './actions.js'
+} from '../actions.js'
 import { connect } from 'react-redux';
 
 const cookies = new Cookies();

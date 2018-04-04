@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Snackbar from 'material-ui/Snackbar';
 import { connect } from 'react-redux'
-import {closeSnackbar} from './actions';
+import {closeSnackbar} from '../actions';
 
 class SnackbarMessage extends Component{
 	render(){

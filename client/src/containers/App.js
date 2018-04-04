@@ -7,8 +7,7 @@ import SnackbarMessage from './Snackbar.js';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import blue from 'material-ui/colors/blue';
 import { Provider } from 'react-redux'
-import configureStore from './store.js'
-import { loadAuthToken } from './actions.js'
+import configureStore from '../store.js'
 
 const store = configureStore();
 const theme = createMuiTheme({

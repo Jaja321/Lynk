@@ -14,7 +14,7 @@ import {
   login,
   closeLoginDialog,
   toggleLoginTab
-} from './actions.js'
+} from '../actions.js'
 import { connect } from 'react-redux';
 
 class LoginDialog extends Component{

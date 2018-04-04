@@ -5,7 +5,7 @@ import Input, {InputLabel} from 'material-ui/Input';
 import Typography from 'material-ui/Typography';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import { connect } from 'react-redux'
-import {setSort, fetchPosts} from './actions';
+import {setSort, fetchPosts} from '../actions';
 
 class SortSelect extends Component{
 

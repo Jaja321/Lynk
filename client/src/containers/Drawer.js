@@ -9,7 +9,7 @@ import InboxIcon from 'material-ui-icons/MoveToInbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
 import DrawerList from './DrawerList.js';
 import { connect } from 'react-redux';
-import { closeDrawer } from './actions';
+import { closeDrawer } from '../actions';
 
 const styles = {
   list: {

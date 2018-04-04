@@ -10,7 +10,7 @@ import UserTag from './UserTag.js';
 import SortSelect from './SortSelect.js';
 import Drawer from './Drawer.js';
 import { connect } from 'react-redux';
-import { openDrawer, openLoginDialog } from './actions';
+import { openDrawer, openLoginDialog } from '../actions';
 
 const styles = {
   root: {
