@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User= require('../models/User');
-var jwt = require('jsonwebtoken');
+var utils = require('../utils');
 var bcrypt = require('bcryptjs');
 
 
@@ -24,7 +24,7 @@ router.post('/signup', (req,res)=>{
       user.passwordHash=hash;
       return User.create(user);
     }).then(newUser=>{  
-      var token= jwt.sign({username: newUser.username}, 'banana'); //TODO: put secret in .env
+      var token= utils.getToken({username: newUser.username});
       res.json({token: token, username: newUser.username});
       console.log("Registerd successfully");
     });
@@ -49,7 +49,7 @@ router.post('/login', (req,res)=>{
         return Promise.reject("Wrong Password");
       }
       else{
-        var token= jwt.sign({username: user.username}, 'banana'); //TODO: put secret in .env
+        var token= utils.getToken({username: user.username});
         res.json({token: token, username: user.username});
         console.log('Logged in');
       }
