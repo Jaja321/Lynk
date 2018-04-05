@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.postsWrapper{
+	width: 99%;
+	margin: auto;
+}
+
+.clickable:hover{
+	cursor: pointer;
+	color: #285fb7;
+}
+
+a:hover{
+	cursor: pointer;
+}
+
+.thumb{
+	color: rgba(0, 0, 0, 0.50);
+}
+
+.thumb:hover{
+	cursor: pointer;
+	color: rgba(0, 0, 0, 0.80);
+}
+
+.ml{
+	margin-left: 10px;
+}
