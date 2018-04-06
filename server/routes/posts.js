@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Post= require('../models/Post.js');
-var utils = require('../utils');
+var utils = require('./utils');
 
 const pageSize= 7;
 
@@ -84,11 +84,16 @@ router.post('/:id/unvote', (req,res)=>{
 });
 
 router.post('', (req,res)=>{
+  console.log("in post post");
   var post ={};
   post.title= req.body.title;
   post.url= req.body.url;
-  post.author = req.username;
+  post.author = utils.unpackUserFromToken(req.body.token);
+  console.log("create post object");
   Post.create(post, (err,posts)=>{
+    if(err)
+      console.log(err);
+    console.log("created successfully");
     res.json(post);
   });
 });

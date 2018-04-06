@@ -3,6 +3,10 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
+var urlPrefix= '';
+//if(process.env.NODE_ENV === "production")
+  urlPrefix= 'https://serene-fjord-71244.herokuapp.com'
+
 export function setSort(sort){
   return {
     type: "SET_SORT",
@@ -17,13 +21,13 @@ export function fetchPosts(){
     url+='?page='+page;
     if(user)
       url+='&token=' + token;
-    fetch(url).then(result=>{
+    fetch(urlPrefix+url).then(result=>{
       return result.json();
     }).then(result=>{
       if(result.length>0){
         dispatch(setPosts(result));
         dispatch(showTransition());
-        setTimeout(()=>{dispatch({type: 'SHOW_PAGINATION'})},1000);
+        setTimeout(()=>{dispatch({type: 'SHOW_PAGINATION'})},500);
       }else{
         dispatch(prevPage());
       }
@@ -75,16 +79,19 @@ export function login(){
   console.log("login started");
   return (dispatch, getState)=>{
     const values = getState().loginDialog;
-    fetch('/'+(values.tab == 1? 'signup': 'login'), getPayload({
+    fetch(urlPrefix+'/auth/'+(values.tab == 1? 'signup': 'login'), getPayload({
       username: values.username,
       password: values.password
     })).then(response=>{
       return response.json();
     }).then(res=>{
+      console.log("got results");
       if(res.error){
+        console.log("error in results");
         dispatch(setLoginErrorMessage(res.error));
       }else{
         console.log("got results");
+        console.log('token: '+res.token);
         cookies.set('token', res.token, {path: '/'});
         cookies.set('user', res.username, {path: '/'});
         dispatch(popSnackbar('Welcome, '+res.username+'!'));
@@ -105,19 +112,21 @@ export function submitPost(){
       dispatch(popSnackbar('Please enter a valid URL.'));
       return;
     }
-    fetch('/posts', getPayload({
+    fetch(urlPrefix+'/posts', getPayload({
       title: values.title,
       url: values.url,
       token: getState().general.token
     })).then(res => {
-      if(res.ok)
+      if(res.ok){
         dispatch(popSnackbar('Link submitted successfully'));
+        dispatch(closeAddPostDialog());
+        dispatch(setSort('new'));
+        dispatch(fetchPosts());
+      }
       else
         dispatch(popSnackbar('Subission failed. Please try again.'));
     });
-    dispatch(closeAddPostDialog());
-    dispatch(setSort('new'));
-    dispatch(fetchPosts());
+
   }
 }
 
@@ -222,7 +231,7 @@ export function upvote(post){
     let voteType = 'upvote';
     if(post.upvote) //remove vote
       voteType = 'unvote';
-    fetch('/posts/'+post._id+'/'+voteType+'?token='+token, getPayload({}));
+    fetch(urlPrefix+'/posts/'+post._id+'/'+voteType+'?token='+token, getPayload({}));
     if(post.upvote){
       dispatch(incScore(post._id, -1));
       dispatch(setVote(post._id, 0));
@@ -247,7 +256,7 @@ export function downvote(post){
     let voteType = 'downvote';
     if(post.downvote) //remove vote
       voteType = 'unvote';
-    fetch('/posts/'+post._id+'/'+voteType+'?token='+token, getPayload({}));
+    fetch(urlPrefix+'/posts/'+post._id+'/'+voteType+'?token='+token, getPayload({}));
     if(post.upvote){
       dispatch(incScore(post._id, -2));
       dispatch(setVote(post._id, -1));

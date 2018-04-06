@@ -1,15 +1,20 @@
 var jwt = require('jsonwebtoken');
+
 if(process.env.NODE_ENV !== 'production')
   require('dotenv').load();
 
 function getToken(payload){
-  return jwt.sign(payload, process.env.secret);
+  return jwt.sign(payload, process.env.SECRET);
+}
+
+function unpackUserFromToken(token){
+  return jwt.verify(token, process.env.SECRET).username;
 }
 
 function getUserFromToken(req, res, next){
   var token= req.query.token;
   if(token !== undefined)
-    req.username= jwt.verify(token, process.env.secret).username;
+    req.username= unpackUserFromToken(token);
   else
     req.username= '';
   next();
@@ -57,4 +62,4 @@ function getAggregationStages(req, type){
   return aggregationStages;
 }
 
-module.exports = {getUserFromToken, getAggregationStages, getToken};
+module.exports = {getUserFromToken, getAggregationStages, getToken, unpackUserFromToken};

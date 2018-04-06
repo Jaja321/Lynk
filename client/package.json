@@ -2,8 +2,10 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://glacial-peak-11538.herokuapp.com/",
   "proxy": "http://localhost:3001/",
   "dependencies": {
+    "gh-pages": "^1.1.0",
     "is-url": "^1.2.4",
     "material-ui": "^1.0.0-beta.38",
     "material-ui-icons": "^1.0.0-beta.36",
@@ -19,6 +21,8 @@
     "universal-cookie": "^2.1.2"
   },
   "scripts": {
+	"predeploy": "npm run build",
+	"deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
