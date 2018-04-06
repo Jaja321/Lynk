@@ -1,5 +1,6 @@
 # Lynk
 Lynk is a full-stack (React, Node, MongoDB) reddit-like news aggregation website, in which users can post links and vote on others.
+[Live website](https://glacial-peak-11538.herokuapp.com/) (hosted on heroku)
 
 
 Technical details:
