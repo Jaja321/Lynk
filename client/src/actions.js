@@ -25,12 +25,12 @@ export function fetchPosts(){
     }).then(result=>{
       if(result.length>0){
         dispatch(setPosts(result));
-        dispatch(hideLoading());
         dispatch(showTransition());
         setTimeout(()=>{dispatch({type: 'SHOW_PAGINATION'})},500);
       }else{
         dispatch(prevPage());
       }
+      dispatch(hideLoading());
     });
   } 
 }
