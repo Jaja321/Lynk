@@ -3,9 +3,7 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-var urlPrefix= '';
-if(process.env.NODE_ENV === "production")
-  urlPrefix= 'https://serene-fjord-71244.herokuapp.com'
+var urlPrefix= 'https://serene-fjord-71244.herokuapp.com'
 
 export function setSort(sort){
   return {
