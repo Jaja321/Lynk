@@ -13,7 +13,8 @@ function general(state= {
   drawerOpen: false,
   transitionFlag: true,
   showPagination: false,
-  page: 1
+  page: 1,
+  loading: true
   }, action){
   var newPosts;
   switch(action.type){
@@ -45,7 +46,6 @@ function general(state= {
     else
       return Object.assign({}, state, {page: state.page-1});
   case 'INC_SCORE':
-
     newPosts= state.posts.map(post => {
       if(post._id == action.id)
         return Object.assign({}, post, {score: (post.score+action.amount)} );
@@ -75,6 +75,10 @@ function general(state= {
       return Object.assign({}, post, changes);
     });
     return Object.assign({}, state, {posts: newPosts});
+  case 'HIDE_LOADING':
+    return Object.assign({}, state, {loading: false});
+  case 'SHOW_LOADING':
+    return Object.assign({}, state, {loading: true});
   default:
     return state;
   }

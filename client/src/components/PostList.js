@@ -4,6 +4,7 @@ import PaginationButtons from './PaginationButtons.js';
 import Grow from 'material-ui/transitions/Grow';
 import { connect } from 'react-redux'
 import { fetchPosts, upvote, downvote, nextPage, prevPage } from '../actions.js'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class PostList extends Component {
   componentDidMount(){
@@ -25,7 +26,9 @@ class PostList extends Component {
     ));
     return (
       <div className="postsWrapper">
-        {postElements}
+        {this.props.loading ?
+        <CircularProgress className='loader'/> :
+        postElements}
         {this.props.showPagination? <PaginationButtons
           firstPage= {this.props.page == 1}
           nextPage= {this.props.nextPage}
@@ -41,8 +44,10 @@ const mapStateToProps = state=>({
   user: state.general.user,
   trans: state.general.transitionFlag,
   showPagination: state.general.showPagination,
-  page: state.general.page
+  page: state.general.page,
+  loading: state.general.loading
 });
+
 const mapDispatchToProps = dispatch => ({
   fetchPosts: ()=>{dispatch(fetchPosts())},
   upvote: post => () => {dispatch(upvote(post));},

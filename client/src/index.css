@@ -30,3 +30,8 @@ a:hover{
 .ml{
 	margin-left: 10px;
 }
+
+.loader{
+	display: block !important;
+	margin: 10px auto;
+}

@@ -14,6 +14,7 @@ export function setSort(sort){
 
 export function fetchPosts(){
   return (dispatch, getState) => {
+    dispatch(showLoading());
     const { sort, token, user, page } = getState().general;
     let url = '/posts/'+sort;
     url+='?page='+page;
@@ -24,6 +25,7 @@ export function fetchPosts(){
     }).then(result=>{
       if(result.length>0){
         dispatch(setPosts(result));
+        dispatch(hideLoading());
         dispatch(showTransition());
         setTimeout(()=>{dispatch({type: 'SHOW_PAGINATION'})},500);
       }else{
@@ -284,6 +286,18 @@ export function nextPage(){
 export function prevPage(){
   return {
     type: "PREV_PAGE"
+  }
+}
+
+export function hideLoading(){
+  return {
+    type: "HIDE_LOADING"
+  }
+}
+
+export function showLoading(){
+  return {
+    type: "SHOW_LOADING"
   }
 }
 
